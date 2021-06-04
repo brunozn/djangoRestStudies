@@ -7,27 +7,23 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 
-# @csrf_exempt
+@csrf_exempt
 @api_view(['GET', 'POST'])
 def snippet_list(request, format=None):
     if request.method == 'GET':
         snippets = Snippet.objects.all()
         serializer = SnippetSerializer(snippets, many=True)
         return Response(serializer.data)
-        # return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'POST':
-        # data = JSONParser().parse(request)
         serializer = SnippetSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        #     return JsonResponse(serializer.data, status=201)
-        # return JsonResponse(serializer.errors, status=400)
 
 
-# @csrf_exempt
+@csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
 def snippet_detail(request, pk, format=None):
     try:
